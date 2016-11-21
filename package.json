@@ -1,0 +1,28 @@
+{
+  "name": "chat-testing",
+  "version": "1.0.0",
+  "description": "Learning some sockets",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jongsoojong/ChatTesting.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jongsoojong/ChatTesting/issues"
+  },
+  "homepage": "https://github.com/jongsoojong/ChatTesting#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "http": "0.0.0",
+    "mongoose": "^4.6.8",
+    "nodemon": "^1.11.0",
+    "socket.io": "^1.6.0"
+  }
+}
