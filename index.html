@@ -2,13 +2,30 @@
 <html ng-app="socketApp">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.min.js"></script>
   <script src="main.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./style.css">
   <head>
     <meta charset="utf-8">
     <title>JongChat</title>
   </head>
+
+  <div class="container">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <input type="text" ng-model="login.email" class="form-control">
+        <input type="password" ng-model="login.password" class="form-control">
+        <button type="button" ui-sref="chatRoom">Log in</button>
+        <a ui-sref="signUp">Create an Account</a>
+      </nav>
+  </div>
+
   <body>
-    <h1>Chat</h1>
+
+
+    <!-- <h1>JongChat</h1>
     <div ng-controller="chatController as vm">
       <div id="chat">
         <p ng-repeat="msg in vm.msgs track by $index">{{msg}}</p>
@@ -17,6 +34,9 @@
         <input type="text" ng-model="vm.msg.text"/>
         <input type="submit"/>
       </form>
-    </div>
+    </div> -->
+
+    <div ui-view>  </div>
+
   </body>
 </html>
