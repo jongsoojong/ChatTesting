@@ -36,10 +36,11 @@ app.post('/api/user/signup', function(req, res) {
   //
   // res.json(req.body) WHY?!
 })
-
-app.get('/api/user/login', function(req, res){
-  User.findOne({'username': req.body})
-})
+//
+// app.get('/api/user/login', function(req, res){
+//   console.log(req.body)
+//   User.findOne({'username': req.body})
+// })
 
 
 io.sockets.on('connection', function(socket){
