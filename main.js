@@ -9,36 +9,34 @@ socketApp.controller('chatController', function($scope, $state, $http, $location
   var vm = this;
   vm.msgs = [];
   var thisDate = new Date;
-  vm.messagePrompt = userInfo.currentUsername + " (" + thisDate.toLocaleString() + ")" + ' : '
+  vm.messagePrompt =  userInfo.currentUsername + " (" + thisDate.toLocaleString() + ")" + ' : '
 
   if(userInfo.isLogged === false){
-    alert('Must log in!');
-    $location.path('/login');
+    $location.path('/');
   }
-
+  // gonna make a global init, followed by 4 other chat room init.
   vm.init = function() {
-    getChatData.getData(userInfo)
-    .then(function(res){
-      console.log("THIS IS THE DATAAAAA", res.data)
-      vm.msgs = res.data.messages
-      })
+    $http.get('/api/user/getmainchat')
+    .then(function(results){
+      vm.msgs = results.data.chat
+    })
   }
 
   vm.sendMessage = function() {
-    socket.emit('send-message', vm.msg.text);
+    socket.emit('send-message', vm.messagePrompt + vm.msg.text);
     vm.msg.text = '';
   };
 
-  socket.on('get-message', function(data){
-    vm.msgs.push(vm.messagePrompt + data);
+  socket.on('get-message', function(message){
+    userInfo.currentMessages = message;
+    vm.msgs.push(message);
     $scope.$digest();
-    userInfo.currentMessages = vm.messagePrompt + data;
-    $http.post('/api/user/mainchat', userInfo)
-    .success(function(res){
-      console.log("UPDATED!", userInfo.currentMessages)
-    }).error(function(err){
-      console.log("ERROR", err);
-    })
+    // $http.post('/api/user/mainchat', userInfo)
+    // .success(function(res){
+    //   console.log("updated!")
+    // }).error(function(err){
+    //   console.log("ERROR", err);
+    // })
   });
 
 });
@@ -79,6 +77,7 @@ socketApp.controller('loginController', function($scope, $state, $http, $locatio
         alert("Logged in!")
         $location.path("/main");
         userInfo.currentUsername = vm.userlogin.username;
+        console.log(userInfo)
         userInfo.isLogged = true;
       }
     }).error(function(err){
@@ -86,9 +85,6 @@ socketApp.controller('loginController', function($scope, $state, $http, $locatio
     })
 
   }
-
-
-
 })
 
 //ROUTERS

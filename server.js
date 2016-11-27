@@ -27,6 +27,21 @@ app.get('/', function(req, res){
 })
 
 
+//initiate mainchat
+
+
+Chat.findOne({name: "main"}, function(err, user){
+  console.log("THE USER ", user)
+  if(user === null) {
+    Chat.create({
+      "name": "main",
+      "chat": []
+    })
+  } else {
+    console.log("Main Exists!")
+  }
+})
+
 
 //AUTH
 
@@ -38,20 +53,12 @@ app.post('/api/user/signup', function(req, res) {
   // res.json(req.body) WHY?!
 })
 
-app.post('/api/user/getchat', function(req, res){
-  console.log("Current Chat" + req.body.currentMessages);
-  User.findOne({username: req.body.currentUsername}, function(err, messages){
+app.get('/api/user/getmainchat', function(req, res){
+  console.log("Current Chat" + req.body);
+  Chat.findOne({name: 'main'}, function(err, messages){
     res.send(messages)
   })
 })
-
-app.post('/api/user/mainchat', function(req, res){
-  console.log("current username " + req.body.currentUsername);
-  User.findOneAndUpdate({username: req.body.currentUsername}, {$push: { messages: req.body.currentMessages } }, {upsert:true}, function(err, results){
-    console.log("Current User ", results)
-    res.send(results)
-  })
-});
 
 
 app.post('/api/user/login', function(req, res) {
@@ -71,11 +78,21 @@ app.post('/api/user/login', function(req, res) {
 //     res.send(results);
 //   })
 // })
-
+var connections = [];
 
 io.sockets.on('connection', function(socket){
+  socket.removeAllListeners()
+  socket.on('disconnect', function () {
+    setTimeout(function () {
+         //do something
+    }, 10000);
+  });
   socket.on('send-message', function(data){
+    console.log("SOCKETDATA ",data)
     io.sockets.emit('get-message', data)
+    Chat.findOneAndUpdate({name: 'main'}, {$push: { chat: data } }, {upsert:true}, function(err, message){
+      console.log("AHHHHH!")
+    })
   })
 })
 
