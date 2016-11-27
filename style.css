@@ -2,3 +2,9 @@
 body {
   margin-top: 80px;
 }
+
+#chat {
+  width: 80%;
+  height: 400px;
+  overflow: auto;
+}

@@ -6,6 +6,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var User = require('./db/users.js');
+var Chat = require('./db/chats.js')
 
 //Mongoose!!
 
@@ -29,17 +30,46 @@ app.get('/', function(req, res){
 
 //AUTH
 
+
 app.post('/api/user/signup', function(req, res) {
   console.log(req.body)
   var user = new User(req.body);
   user.save()
-  //
   // res.json(req.body) WHY?!
 })
+
+app.post('/api/user/getchat', function(req, res){
+  console.log("Current Chat" + req.body.currentMessages);
+  User.findOne({username: req.body.currentUsername}, function(err, messages){
+    res.send(messages)
+  })
+})
+
+app.post('/api/user/mainchat', function(req, res){
+  console.log("current username " + req.body.currentUsername);
+  User.findOneAndUpdate({username: req.body.currentUsername}, {$push: { messages: req.body.currentMessages } }, {upsert:true}, function(err, results){
+    console.log("Current User ", results)
+    res.send(results)
+  })
+});
+
+
+app.post('/api/user/login', function(req, res) {
+  console.log(req.body)
+  User.findOne(req.body, function(err, user){
+    console.log("THE USER ", user)
+    res.send(user);
+  })
+})
+
+
+
 //
-// app.get('/api/user/login', function(req, res){
-//   console.log(req.body)
-//   User.findOne({'username': req.body})
+// app.get('/api/getChat', function(req, res){
+//   Chat.findOne(req.body)
+//   .then(function(results){
+//     res.send(results);
+//   })
 // })
 
 

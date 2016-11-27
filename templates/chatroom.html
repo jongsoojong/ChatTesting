@@ -3,7 +3,7 @@
 <h1>JongChat</h1>
 <div class="container">
 <div>
-  <div id="chat">
+  <div id="chat" ng-init="vm.init()">
     <p ng-repeat="msg in vm.msgs track by $index">{{msg}}</p>
   </div>
   <form ng-submit="vm.sendMessage()">
